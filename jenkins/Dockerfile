@@ -1,5 +1,7 @@
 FROM jenkins/jenkins:latest
 
 COPY jenkins.yml /usr/share/jenkins/ref/casc_config/jenkins.yml
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+COPY job_dsl.groovy /usr/share/jenkins/init.groovy.d/job_dsl.groovy
 
-RUN jenkins-plugin-cli --plugins "configuration-as-code:latest job-dsl:latest cloudbees-folder:latest credentials:latest instance-identity:latest script-security:latest structs:latest role-strategy:latest ws-cleanup:latest"
+RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt

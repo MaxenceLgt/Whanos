@@ -17,3 +17,6 @@ jenkins:
               - "Overall/Administer"
             entries:
               - user: "admin"
+
+jobs:
+  - file: /usr/share/jenkins/init.groovy.d/job_dsl.groovy
