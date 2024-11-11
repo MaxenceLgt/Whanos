@@ -1,0 +1,19 @@
+jenkins:
+  SystemMessage: "Whanos Project"
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "Admin"
+          password: "${ADMIN_PASSWORD}"
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "Administrator"
+            description: "Whanos Administrator"
+            permissions: 
+              - "Overall/Administer"
+            entries:
+              - user: "admin"
