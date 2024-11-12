@@ -5,7 +5,7 @@ folder('/Projects') {
     displayName('Projects')
 }
 
-languages = ["c", "java"]
+languages = ["c", "java", "javascript"]
 
 languages.each { language ->
     freeStyleJob("/Whanos base images/whanos-$language") {
