@@ -1,0 +1,9 @@
+FROM alpine:latest
+
+RUN apk add --no-cache cfunge
+
+COPY app/main.bf /app/main.bf
+
+WORKDIR /app
+
+CMD ["cfunge", "main.bf"]
