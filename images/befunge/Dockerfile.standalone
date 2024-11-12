@@ -2,7 +2,7 @@ FROM alpine:latest
 
 RUN apk add --no-cache cfunge
 
-COPY app/main.bf /app/main.bf
+COPY . /app
 
 WORKDIR /app
 
