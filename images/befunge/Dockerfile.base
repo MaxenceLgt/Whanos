@@ -3,7 +3,8 @@ FROM alpine:latest
 ONBUILD RUN apk add --no-cache cfunge
 
 ONBUILD COPY . /app
-
 ONBUILD WORKDIR /app
+
+ONBUILD RUN rm -rf /app/* && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 ONBUILD CMD ["cfunge", "main.bf"]

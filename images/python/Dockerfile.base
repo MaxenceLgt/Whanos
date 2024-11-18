@@ -1,9 +1,10 @@
 FROM python:3.12-alpine
 
 ONBUILD COPY . /app
-
 ONBUILD WORKDIR /app
 
-ONBUILD RUN pip install -r requirements.txt
+ONBUILD RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "-m", "app"]
+ONBUILD RUN rm -rf /app/* && rm -rf /tmp/* /var/tmp/*
+
+ONBUILD CMD ["python", "-m", "app"]

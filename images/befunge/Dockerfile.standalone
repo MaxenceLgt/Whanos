@@ -3,7 +3,8 @@ FROM alpine:latest
 RUN apk add --no-cache cfunge
 
 COPY . /app
-
 WORKDIR /app
+
+RUN rm -rf /app/* && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 CMD ["cfunge", "main.bf"]
