@@ -4,7 +4,6 @@ ONBUILD COPY . /app
 ONBUILD WORKDIR /app
 
 ONBUILD RUN pip install --no-cache-dir -r requirements.txt
-
-ONBUILD RUN rm -rf /app/* && rm -rf /tmp/* /var/tmp/*
+ONBUILD RUN rm -rf Dockerfile.standalone Dockerfile.base /tmp/* /var/tmp/* requirements.txt
 
 ONBUILD CMD ["python", "-m", "app"]
