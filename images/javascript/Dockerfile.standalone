@@ -3,5 +3,8 @@ FROM node:20.9.0-alpine
 COPY . /app
 WORKDIR /app
 
+EXPOSE 3000
 RUN npm install
-RUN node .
+RUN rm -rf Dockerfile.standalone Dockerfile.base package-lock.json
+
+CMD node .
