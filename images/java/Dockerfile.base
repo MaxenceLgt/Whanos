@@ -1,5 +1,7 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS builder
 
+ONBUILD SHELL ["/bin/bash", "-c"]
+
 ONBUILD COPY . /app
 ONBUILD WORKDIR /app/app/
 
@@ -7,6 +9,9 @@ ONBUILD RUN mvn dependency:resolve
 ONBUILD RUN mvn package
 
 FROM eclipse-temurin:21-jdk-alpine
+
+ONBUILD RUN apk add --no-cache bash
+ONBUILD SHELL ["/bin/bash", "-c"]
 
 ONBUILD COPY --from=builder /app/app/target /app
 ONBUILD WORKDIR /app
