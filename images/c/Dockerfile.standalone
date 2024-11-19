@@ -4,6 +4,6 @@ COPY . /app
 WORKDIR /app
 
 RUN make
-RUN rm -rf app/ && rm -rf Makefile
+RUN rm -rf app/ Makefile Dockerfile.standalone Dockerfile.base
 
 CMD ./compiled-app

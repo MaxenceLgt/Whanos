@@ -4,6 +4,6 @@ ONBUILD COPY . /app
 ONBUILD WORKDIR /app
 
 ONBUILD RUN make
-ONBUILD RUN rm -rf app/ && rm -rf Makefile
+ONBUILD RUN rm -rf app/ Makefile Dockerfile.standalone Dockerfile.base
 
 ONBUILD CMD ./compiled-app
