@@ -1,10 +1,21 @@
-FROM alpine:latest
+FROM debian:bullseye-slim
 
-ONBUILD RUN apk add --no-cache cfunge
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git build-essential bash curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN git config --global http.sslVerify false
+
+RUN git clone https://github.com/catseye/Befunge-93.git && \
+    cd Befunge-93 && \
+    make && \
+    cp bin/bef /usr/local/bin/ && \
+    cd ../ && \
+    rm -rf Befunge-93
 
 ONBUILD COPY . /app
 ONBUILD WORKDIR /app
 
-ONBUILD RUN rm -rf /app/* && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+ONBUILD RUN rm -rf Dockerfile.standalone Dockerfile.base
 
-ONBUILD CMD ["cfunge", "main.bf"]
+ONBUILD CMD ["/usr/local/bin/bef", "main.bf"]
