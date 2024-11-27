@@ -7,3 +7,4 @@ script-security:latest
 structs:latest
 role-strategy:latest
 ws-cleanup:latest
+github:latest

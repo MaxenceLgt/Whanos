@@ -26,3 +26,37 @@ freeStyleJob("Whanos base images/Build all base images") {
         }
     }
 }
+
+freeStyleJob('link-project') {
+    parameters {
+        stringParam("DISPLAY_NAME", null, "Display name for the job.")
+        stringParam("SSH_URL", null, "Git repository URL [ssh]")
+        stringParam("CREDENTIALS_ID", null, "Reference to jenkins credentials ssh_key")
+    }
+    steps {
+        dsl {
+            text('''
+                freeStyleJob("Projects/$DISPLAY_NAME") {
+                    wrappers {
+                        preBuildCleanup()
+                    }
+                    scm {
+                        git {
+                            remote {
+                                url(SSH_URL)
+                                credentials(CREDENTIALS_ID)
+                            }
+                            branch('main')
+                        }
+                    }
+                    triggers {
+                        scm("* * * * *")
+                    }
+                    steps {
+                        shell("/usr/bin/linkproject.sh")
+                    }
+                }
+            '''.stripIndent())
+        }
+    }
+}

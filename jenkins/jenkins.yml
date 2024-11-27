@@ -18,5 +18,9 @@ jenkins:
             entries:
               - user: "admin"
 
+security:
+  gitHostKeyVerificationConfiguration:
+    sshHostKeyVerificationStrategy: "acceptFirstConnectionStrategy"
+
 jobs:
   - file: /usr/share/jenkins/init.groovy.d/job_dsl.groovy
