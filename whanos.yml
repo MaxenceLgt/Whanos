@@ -1,21 +1,11 @@
-apps:
-  - name: nginx-app
-    image: nginx:latest
-    replicas: 2
-    ports:
-      - 80
-    host: nginx.example.local
-
-  - name: custom-backend
-    image: my-custom-backend:1.0
-    replicas: 3
-    ports:
-      - 8080
-    host: backend.example.local
-
-  - name: external-database
-    image: postgres:15
-    replicas: 1
-    ports:
-      - 5432
-    host: postgres.example.local
+deployment:
+  replicas: 2
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "250m"
+      memory: "128Mi"
+  ports:
+    - 8080
