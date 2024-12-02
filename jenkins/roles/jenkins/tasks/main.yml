@@ -1,0 +1,110 @@
+- name: Install Java 17
+  become: true
+  apt:
+    name: "default-jdk"
+    state: "present"
+
+- name: Install fontconfig
+  become: true
+  apt:
+    name: "fontconfig"
+    state: "present"
+
+- name: Install Jenkins plugin manager
+  become: true
+  get_url:
+    url: "https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.2/jenkins-plugin-manager-2.13.2.jar"
+    dest: "/tmp/jenkins-plugin-manager-2.13.2.jar"
+
+- name: Download jenkins key
+  become: true
+  get_url:
+    url: "https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key"
+    dest: "/usr/share/keyrings/jenkins-keyring.asc"
+    mode: '0644'
+
+- name: Add Jenkins repository to sources list
+  become: true
+  lineinfile:
+    path: "/etc/apt/sources.list.d/jenkins.list"
+    line: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+    create: yes
+
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install jenkins
+  become: true
+  apt:
+    name: "jenkins"
+    state: "present"
+
+- name: Stop jenkins
+  become: true
+  systemd_service:
+    name: "jenkins"
+    state: "stopped"
+
+#- name: "Define env variable use by plugin manager"
+#  become: true
+#  lineinfile:
+#
+- name: Install nginx
+  become: true
+  apt:
+    name: nginx
+    state: present
+
+- name: Copy nginx reverse proxy conf
+  become: true
+  template:
+    src: "../files/default.conf"
+    dest: "/etc/nginx/conf.d"
+
+#- name: Copy docker images
+#  become: true
+#  copy:
+#    src: "{{ playbook_dir }}/../images/"
+#    dest: "/images/"
+
+- name: Copy linkproject shell
+  become: true
+  copy:
+    src: "../files/linkproject.sh"
+    dest: "/usr/bin/"
+
+- name: Copy plugin file
+  become: true
+  template:
+    src : "../files/plugins.txt"
+    dest: "/tmp/plugins.txt"
+
+- name: Copy Jenkins yml
+  become: true
+  template:
+    src: "../files/jenkins.yml"
+    dest: "/var/lib/jenkins/jenkins.yml"
+
+- name: Copy jobdsl groovy
+  become: true
+  copy: 
+    src: "../files/job_dsl.groovy"
+    dest: "/usr/share/jenkins/init.groovy.d/job_dsl.groovy"
+
+- name: Start plugin cli
+  become: true
+  command: "java -jar /tmp/jenkins-plugin-manager-2.13.2.jar --plugin-file /tmp/plugins.txt"
+
+- name: Start jenkins
+  become: true
+  systemd_service:
+    name: "jenkins"
+    state: "started"
+
+- name: Start nginx service
+  become: true
+  service:
+    name: nginx
+    state: started

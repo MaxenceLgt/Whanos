@@ -1,0 +1,57 @@
+- name: Update VM
+  become: true
+  apt:
+    update_cache: true
+  
+- name: Upgrade VM
+  become: true
+  apt:
+    upgrade: "full"
+
+- name: Install git
+  become: true
+  apt:
+    name: git
+    state: present
+
+- name: Install zip
+  become: true
+  apt:
+    name: zip
+    state: present
+
+- name: Install tar
+  become: true
+  apt:
+    name: tar
+    state: present
+
+- name: Install curl
+  become: true
+  apt:
+    name: curl
+    state: present
+
+- name: Install wget
+  become: true
+  apt:
+    name: wget
+    state: present
+
+- name: Install python3
+  become: true
+  apt:
+    name: python3
+    state: present
+
+- name: Install pip
+  become: true
+  apt:
+    name: python3-pip
+    state: present
+  
+- name: Install docker
+  become: true
+  apt:
+    name: docker
+    state: present

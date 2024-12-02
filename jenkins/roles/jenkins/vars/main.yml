@@ -1,0 +1,3 @@
+ADMIN_PASSWORD: admin
+JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+CASC_JENKINS_CONFIG: "/usr/share/jenkins/ref/casc_config/jenkins.yml"

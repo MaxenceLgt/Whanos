@@ -29,3 +29,4 @@ if [[ -f "Dockerfile" ]]; then
 else
     docker build . -f /images/${LANGUAGE[0]}/Dockerfile.standalone \
     -t whanos-${LANGUAGE[0]}
+fi

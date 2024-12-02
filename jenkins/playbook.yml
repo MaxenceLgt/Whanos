@@ -1,0 +1,13 @@
+- name: base
+  hosts: all
+  roles:
+    - base
+  tags:
+    - base
+
+- name: jenkins
+  hosts: jenkins
+  roles:
+    - jenkins
+  tags:
+    - jenkins
