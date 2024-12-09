@@ -43,25 +43,27 @@
 
 - name: Stop jenkins
   become: true
-  systemd_service:
+  systemd:
     name: "jenkins"
     state: "stopped"
 
-#- name: "Define env variable use by plugin manager"
-#  become: true
-#  lineinfile:
-#
 - name: Install nginx
   become: true
   apt:
     name: nginx
     state: present
 
+- name: Remove Nginx default virtual host
+  become: true
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
 - name: Copy nginx reverse proxy conf
   become: true
   template:
     src: "../files/default.conf"
-    dest: "/etc/nginx/conf.d"
+    dest: "/etc/nginx/conf.d/default.conf"
 
 #- name: Copy docker images
 #  become: true
@@ -87,19 +89,33 @@
     src: "../files/jenkins.yml"
     dest: "/var/lib/jenkins/jenkins.yml"
 
+- name: Create groovy folder
+  become: true
+  ansible.builtin.file:
+    path: /usr/share/jenkins/init.groovy.d
+    state: directory
+
 - name: Copy jobdsl groovy
   become: true
   copy: 
     src: "../files/job_dsl.groovy"
     dest: "/usr/share/jenkins/init.groovy.d/job_dsl.groovy"
 
+- name: Replace Java args 
+  become: true
+  ansible.builtin.replace:
+    path: "/etc/default/jenkins"
+    regexp: "^JAVA_ARGS=.*"
+    replace: 'JAVA_ARGS="{{ JAVA_OPTS }}"'
+
 - name: Start plugin cli
   become: true
-  command: "java -jar /tmp/jenkins-plugin-manager-2.13.2.jar --plugin-file /tmp/plugins.txt"
+  command: "java -jar /tmp/jenkins-plugin-manager-2.13.2.jar --plugin-file /tmp/plugins.txt \
+  --plugin-download-directory /var/lib/jenkins/plugins"
 
 - name: Start jenkins
   become: true
-  systemd_service:
+  systemd:
     name: "jenkins"
     state: "started"
 
@@ -107,4 +123,5 @@
   become: true
   service:
     name: nginx
-    state: started
+    state: restarted
+    daemon-reload: yes
