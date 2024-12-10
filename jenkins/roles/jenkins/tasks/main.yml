@@ -65,17 +65,20 @@
     src: "../files/default.conf"
     dest: "/etc/nginx/conf.d/default.conf"
 
-#- name: Copy docker images
-#  become: true
-#  copy:
-#    src: "{{ playbook_dir }}/../images/"
-#    dest: "/images/"
+- name: Copy docker images
+  become: true
+  copy:
+   src: "{{ playbook_dir }}/../images/"
+   dest: "/images/"
 
 - name: Copy linkproject shell
   become: true
   copy:
     src: "../files/linkproject.sh"
     dest: "/usr/bin/"
+    owner: jenkins
+    group: jenkins
+    mode: '0774'
 
 - name: Copy plugin file
   become: true
@@ -88,6 +91,9 @@
   template:
     src: "../files/jenkins.yml"
     dest: "/var/lib/jenkins/jenkins.yml"
+    owner: jenkins
+    group: jenkins
+    mode: '0644'
 
 - name: Create groovy folder
   become: true
@@ -101,23 +107,31 @@
     src: "../files/job_dsl.groovy"
     dest: "/usr/share/jenkins/init.groovy.d/job_dsl.groovy"
 
-- name: Replace Java args 
+- name: Replace Java OPTS 
   become: true
   ansible.builtin.replace:
-    path: "/etc/default/jenkins"
-    regexp: "^JAVA_ARGS=.*"
-    replace: 'JAVA_ARGS="{{ JAVA_OPTS }}"'
+    path: "/lib/systemd/system/jenkins.service"
+    regexp: '^Environment="JAVA_OPTS=.*'
+    replace: 'Environment="JAVA_OPTS={{ JAVA_OPTS }}"'
 
 - name: Start plugin cli
   become: true
   command: "java -jar /tmp/jenkins-plugin-manager-2.13.2.jar --plugin-file /tmp/plugins.txt \
   --plugin-download-directory /var/lib/jenkins/plugins"
 
+- name: Add jenkins to docker group
+  become: true
+  user:
+    name: jenkins
+    groups: docker
+    append: yes
+
 - name: Start jenkins
   become: true
   systemd:
     name: "jenkins"
     state: "started"
+    daemon-reload: yes
 
 - name: Start nginx service
   become: true

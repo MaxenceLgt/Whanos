@@ -1,7 +1,7 @@
 jenkins:
   hosts:
     jenkins-1:
-      ansible_host: 40.67.193.17
+      ansible_host: 4.180.13.70
       jenkins_port: 22
       ansible_ssh_user: maxence
       ansible_ssh_private_key_file: /home/maxence/.ssh/id_rsa

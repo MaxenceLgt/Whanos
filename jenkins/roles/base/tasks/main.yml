@@ -53,5 +53,5 @@
 - name: Install docker
   become: true
   apt:
-    name: docker
+    name: docker*
     state: present
