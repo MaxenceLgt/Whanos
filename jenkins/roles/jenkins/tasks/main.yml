@@ -1,27 +1,23 @@
-- name: Install Java 17
+- name: Jenkins requirements installs
   become: true
   apt:
-    name: "default-jdk"
-    state: "present"
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop:
+    - { name: "default-jdk", state: "present" }
+    - { name: "fontconfig", state: "present"}
 
-- name: Install fontconfig
-  become: true
-  apt:
-    name: "fontconfig"
-    state: "present"
-
-- name: Install Jenkins plugin manager
+- name: Install Jenkins Plugin Manager && Jenkins key
   become: true
   get_url:
-    url: "https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.2/jenkins-plugin-manager-2.13.2.jar"
-    dest: "/tmp/jenkins-plugin-manager-2.13.2.jar"
-
-- name: Download jenkins key
-  become: true
-  get_url:
-    url: "https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key"
-    dest: "/usr/share/keyrings/jenkins-keyring.asc"
-    mode: '0644'
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { url: "https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.2/jenkins-plugin-manager-2.13.2.jar",
+        dest: "/tmp/jenkins-plugin-manager-2.13.2.jar", mode: '0644' }
+    - { url: "https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
+        dest: "/usr/share/keyrings/jenkins-keyring.asc", mode: '0644' }
 
 - name: Add Jenkins repository to sources list
   become: true
@@ -47,47 +43,39 @@
     name: "jenkins"
     state: "stopped"
 
-- name: Copy docker images
-  become: true
-  copy:
-   src: "{{ playbook_dir }}/../images/"
-   dest: "/images/"
-
-- name: Copy linkproject shell
-  become: true
-  copy:
-    src: "../files/linkproject.sh"
-    dest: "/usr/bin/"
-    owner: jenkins
-    group: jenkins
-    mode: '0774'
-
-- name: Copy plugin file
-  become: true
-  template:
-    src : "../files/plugins.txt"
-    dest: "/tmp/plugins.txt"
-
-- name: Copy Jenkins yml
-  become: true
-  template:
-    src: "../files/jenkins.yml"
-    dest: "/var/lib/jenkins/jenkins.yml"
-    owner: jenkins
-    group: jenkins
-    mode: '0644'
-
 - name: Create groovy folder
   become: true
   ansible.builtin.file:
     path: /usr/share/jenkins/init.groovy.d
     state: directory
 
-- name: Copy jobdsl groovy
+
+- name: Copy jenkins files without templates
   become: true
-  copy: 
-    src: "../files/job_dsl.groovy"
-    dest: "/usr/share/jenkins/init.groovy.d/job_dsl.groovy"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { src: "{{ playbook_dir }}/../images/", dest: "/images/", owner: "jenkins", group: jenkins, mode: '0644'}
+    - { src: "../files/linkproject.sh", dest: "/usr/bin", owner: "jenkins", group: jenkins, mode: '0774'}
+    - { src: "../files/job_dsl.groovy", dest: /usr/share/jenkins/init.groovy.d/job_dsl.groovy", owner: "jenkins",
+        group: "jenkins", mode: "0644"}
+
+- name: Copy jenkins files using templates
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { src: "../files/plugins.txt", dest: "/tmp/plugins.txt", owner: "jenkins", group: jenkins, mode: '0644'}
+    - { src: "./files/jenkins.yml", dest: "/usr/bin", owner: "jenkins", group: jenkins, mode: '0644' }
+
 
 - name: Replace Java OPTS 
   become: true
