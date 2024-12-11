@@ -8,6 +8,7 @@
 - name: jenkins
   hosts: jenkins
   roles:
+    - nginx
     - jenkins
   tags:
     - jenkins
