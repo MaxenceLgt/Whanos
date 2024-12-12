@@ -6,9 +6,22 @@
     - base
 
 - name: jenkins
-  hosts: jenkins
+  hosts: azure
   roles:
-    - nginx
     - jenkins
   tags:
     - jenkins
+
+- name: nginx
+  hosts: azure
+  roles:
+    - nginx
+  tags:
+    - nginx
+
+- name: kube
+  hosts: azure
+  roles:
+    - kube
+  tags:
+    - kube
