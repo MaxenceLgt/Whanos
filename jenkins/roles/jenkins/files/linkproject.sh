@@ -33,8 +33,6 @@ else
     -t whanos-${LANGUAGE[0]}
 fi
 
-echo "MON USERNAME $DOCKER_USERNAME"
-
 docker login --username="$DOCKER_USERNAME" --password="$DOCKER_PASSWORD"
 docker image tag whanos-${LANGUAGE[0]}:latest "$DOCKER_USERNAME"/whanos-${LANGUAGE[0]}:latest
 docker push "$DOCKER_USERNAME"/whanos-${LANGUAGE[0]}
