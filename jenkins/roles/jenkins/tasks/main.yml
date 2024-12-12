@@ -74,7 +74,7 @@
     mode: "{{ item.mode }}"
   loop:
     - { src: "../files/plugins.txt", dest: "/tmp/plugins.txt", owner: "jenkins", group: jenkins, mode: '0644'}
-    - { src: "./files/jenkins.yml", dest: "/usr/bin", owner: "jenkins", group: jenkins, mode: '0644' }
+    - { src: "../files/jenkins.yml", dest: "/var/lib/jenkins/jenkins.yml", owner: "jenkins", group: jenkins, mode: '0644' }
 
 
 - name: Replace Java OPTS 
