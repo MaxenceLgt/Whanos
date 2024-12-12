@@ -1,0 +1,43 @@
+- name: Install Necessary Dependencies
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+
+- name: Install Kubectl From Curl
+  become: true
+  get_url:
+    url: "https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl"
+    dest: "/usr/bin"
+    mode: '0777'
+
+- name: Curl Helm Signing Key
+  become: true
+  get_url:
+    url: "https://baltocdn.com/helm/signing.asc"
+    dest: "/tmp/helm-signing.asc"
+    mode: '0644'
+
+- name: Convert Signing Key To Binary
+  become: true
+  command: "gpg --dearmor -o /usr/share/keyrings/helm.gpg /tmp/helm-signing.asc"
+  args:
+    creates: "/usr/share/keyrings/helm.gpg"
+
+- name: Add Helm Repository To Sources List
+  become: true
+  shell: "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main\" > \
+    /etc/apt/sources.list.d/helm-stable-debian.list"
+
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install Helm
+  become: true
+  apt:
+    name: "helm"
+    state: "present"
