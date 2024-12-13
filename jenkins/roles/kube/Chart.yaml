@@ -1,0 +1,4 @@
+apiVersion: v2
+name: whanos
+description: A minimal Helm chart for Whanos Kubernetes deployment
+version: 0.1.0
