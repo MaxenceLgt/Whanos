@@ -3,6 +3,7 @@
 ## Table of content
 - [SSH Requiest](#ssh-requiest)
 - [Create Your Project](#create-your-project)
+- [Authors](#authors)
 
 ## SSH Requiest
 Before creating a project, you must add your private SSH key to the Jenkins instance by creating a corresponding credential for it. This will allow Jenkins to access the repositories specified in the jobs, provided the necessary permissions to the repositories are granted.
@@ -49,3 +50,7 @@ To approve the script and resolve this error, navigate to `Dashboard` -> `Manage
 ---
 
 If the job is successful, you will see your linked repository listed under the `Projects` folder on the `Dashboard`.
+
+## Authors
+**[Maxence Largeot](https://github.com/MaxenceLgt)**  
+**[Arthur Doriel](https://github.com/MrMarmotte)**
