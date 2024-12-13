@@ -26,3 +26,26 @@ Once on the page, select `SSH Username with private key` as the `Kind` and fill 
 Finally, click **Create** to save the credential.
 
 ## Create Your Project
+
+To link a Git repository to the Whanos architecture, you need to use the `link-project` job.
+
+From the `Dashboard`, navigate to `link-project` and click on `Build with Parameters`.
+
+Fill in the fields using the following guidelines:
+
+- **DISPLAY_NAME**: The name your project will have within the Whanos infrastructure.  
+- **SSH_URL**: The SSH URL of your Git repository (e.g., `git@github.com:Owner/Repo.git`).  
+- **CREDENTIALS_ID**: The ID of the credential containing the SSH key you created (e.g., `git-ssh`).  
+
+---
+
+**NOTES**  
+
+- If you haven’t created a credential for your SSH key yet, refer to **[SSH Requiest](#ssh-requiest)**.
+
+- If script approval has not been completed beforehand, your job will automatically fail.
+To approve the script and resolve this error, navigate to `Dashboard` -> `Manage Jenkins` -> `In-process Script Approval`. Review and approve the displayed script. Once approved, try linking or relinking your repository again.
+
+---
+
+If the job is successful, you will see your linked repository listed under the `Projects` folder on the `Dashboard`.
