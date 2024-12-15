@@ -50,3 +50,44 @@ For Ansible deployment, you will need to store two pieces of information from yo
 - **Public IP**: The public IP address of the virtual machine. You can find it by clicking the `Go to resource` button or by accessing your virtual machine settings from the Azure home page.  
 
 ---  
+
+## Set Up Whanos Requirements
+
+Before setting up the requirements for Whanos, ensure you have the Whanos infrastructure files available on your local machine.
+
+### Ansible Deployment Prerequisites
+
+To deploy your infrastructure on the newly created VM, we will use `ansible-playbook`.
+
+Before running the playbook, certain variables need to be configured in the project files.
+
+In the file `jenkins/production.yml`, complete the fields according to the following guidelines:
+
+- **ansible_host**: The public IP address of your machine.  
+- **ansible_port**: SSH connection port (22).  
+- **ansible_ssh_user**: The username configured on your VM.  
+- **ansible_ssh_private_key_file**: Path to your private SSH key file.  
+
+Once these Ansible variables are properly configured and after configuring Jenkins variables, you can deploy the infrastructure online by executing command given in [Deploy Your Whanos Infrastructure](#deploy-your-whanos-infrastructure)
+
+
+### Jenkins Variables Configuration
+
+To properly set up Jenkins, you will first need to configure a few variables.
+
+To create images in a Docker registry, you must provide your credentials in `jenkins/roles/jenkins/files/linkproject.sh` under the respective variables: **DOCKER_USERNAME** and **DOCKER_PASSWORD**.
+
+Finally, to set the password for your administrator account, specify the desired password in the file `jenkins/roles/jenkins/vars/main.yml` under the **ADMIN_PASSWORD** field. The password will be applied once the infrastructure is deployed.
+
+## Deploy Your Whanos Infrastructure
+
+To deploy the infrastructure on the virtual machine, run the following command:
+
+```sh
+ansible-playbook -i jenkins/production.yml jenkins/playbook.yml
+```
+
+Once completed, you can access your Jenkins instance using the public IP address of your virtual machine.
+
+As an administrator, to prevent potential job failures, make sure to approve the script from the Jenkins interface by navigating to:  
+`Manage Jenkins` -> `In-process Script Approval` -> `Approve`.
