@@ -91,3 +91,7 @@ Once completed, you can access your Jenkins instance using the public IP address
 
 As an administrator, to prevent potential job failures, make sure to approve the script from the Jenkins interface by navigating to:  
 `Manage Jenkins` -> `In-process Script Approval` -> `Approve`.
+
+## Authors
+**[Maxence Largeot](https://github.com/MaxenceLgt)**  
+**[Arthur Doriel](https://github.com/MrMarmotte)**
