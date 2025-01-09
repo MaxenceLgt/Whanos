@@ -1,6 +1,7 @@
 # Whanos
 
 The goal of this project is to create a complete CI/CD pipeline to deploy an application from a linked Git repository.
+As this project was created for learning purposes, credentials may be present but are no longer active or accessible.
 
 ## Table of Contents
 - [Development Tools](#development-tools)
