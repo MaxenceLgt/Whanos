@@ -86,3 +86,5 @@ EOF
 
   echo "Application $NAME déployée avec succès !"
 done
+
+# Added to try PR templating
